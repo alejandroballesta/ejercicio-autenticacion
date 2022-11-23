@@ -8,10 +8,12 @@
     <p id="greeting">Hello Anonymous</p>
     <p id="data">Hidden data</p>
     <button id="btn-login">Log in</button>
-    <button id="btn-logout">Log out</button>
+    <button id="btn-logout" disabled>Log out</button>
 </body>
 <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 <script>
+    callData("")
+
     auth0.createAuth0Client({
         domain: "dev-mjmzgyd7.us.auth0.com",
         clientId: "RrNXDsP8EEtmVXAsEK6Pt0zzcS4GgknA",
@@ -45,10 +47,15 @@
 
         if (isAuthenticated) {
             document.getElementById("greeting").innerHTML = `Hi ${userProfile.nickname}!`;
+            document.getElementById("btn-logout").disabled = false;
+            document.getElementById("btn-login").disabled = true;
         }
 
         const token = await auth0Client.getTokenSilently();
-
+        callData(token);
+    });
+    
+    function callData(token) {
         const req = new XMLHttpRequest();
         req.open("GET", "/api/protectedData", false);
         req.setRequestHeader("Authorization", `Bearer ${token}`);
@@ -56,7 +63,7 @@
         if (req.status === 200) {
             document.getElementById("data").innerHTML = req.responseText;
         }
-    });
+    }
 </script>
 
 </html>
