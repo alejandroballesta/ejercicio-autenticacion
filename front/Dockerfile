@@ -1,5 +1,5 @@
 FROM node
-ENV CHOKIDAR_USEPOLLING=true
+# ENV CHOKIDAR_USEPOLLING=true
 WORKDIR /app/
 COPY package.json .
 COPY package-lock.json .
