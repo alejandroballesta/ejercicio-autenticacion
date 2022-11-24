@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: web_app
+    image: web_app
+    build: ./
+    volumes:
+      - "./src:/app/src"
+    ports:
+      - 3000:3000
+
+  oauth2-proxy:
+      image: bitnami/oauth2-proxy:7.3.0
+      environment:
+        OAUTH2_PROXY_HTTP_ADDRESS: "http://0.0.0.0:4180/"
+        OAUTH2_PROXY_EMAIL_DOMAINS: '*'
+        OAUTH2_PROXY_COOKIE_SECURE: "false"
+        OAUTH2_PROXY_COOKIE_SECRET: "QWRtaW5BZG1pbjEy"
+        OAUTH2_PROXY_UPSTREAMS: "http://app:3000/api/protectedData/"
+        OAUTH2_PROXY_PROVIDER: oidc 
+        OAUTH2_PROXY_OIDC_ISSUER_URL: "https://dev-mjmzgyd7.us.auth0.com/"
+        OAUTH2_PROXY_CLIENT_ID: "RrNXDsP8EEtmVXAsEK6Pt0zzcS4GgknA"
+        OAUTH2_PROXY_CLIENT_SECRET: "VppJCXgadNFiPDgmBYwSBFwyKlXbQ9HUYuFvNawHeGKTwD2LXCrEaG0hpwyPL00I"
+        OAUTH2_PROXY_REDIRECT_URL: "http://app:3000/"
+        OAUTH2_PROXY_PROVIDER_DISPLAY_NAME: Auth0
+        OAUTH2_PROXY_PASS_ACCESS_TOKEN: "true"
+        OAUTH2_PROXY_SET_XAUTHREQUEST: "true"
+        OAUTH2_PROXY_SKIP_PROVIDER_BUTTON: "true"
+      ports:
+        - 4180:4180 

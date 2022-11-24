@@ -1,14 +1,16 @@
 <html>
-    <head>
-
-    </head>
+    <head></head>
     <body>
         <p id="greeting">Hello Anonymous</p>
         <p id="data">Hidden data</p>
-        <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-        <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+        <button id="btn-login">Log in</button>
+        <button id="btn-logout">Log out</button>
     </body>
     <script>
+        document.getElementById('btn-login').addEventListener('click', e => {
+            e.preventDefault();
+            alert('hola');
+        });
         const req = new XMLHttpRequest();
         req.open('GET', '/api/protectedData', false);
         req.send(null);
