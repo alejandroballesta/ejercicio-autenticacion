@@ -4,16 +4,12 @@ services:
   front:
     container_name: front
     build: ./front
-    volumes:
-      - ".:./app/src"
     ports:
       - 3000:3000
 
   back:
     container_name: back
     build: ./back
-    volumes:
-      - ".:./app/src"
     ports:
       - 3001:3001
 
@@ -21,6 +17,6 @@ services:
       image: bitnami/oauth2-proxy:7.3.0
       command: --config /oauth2.cfg
       volumes:
-        - "./oauth2.cfg:/oauth2.cfg"
+        - ./oauth2.cfg:/oauth2.cfg
       ports:
         - 4180:4180 
