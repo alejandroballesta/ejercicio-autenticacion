@@ -4,17 +4,13 @@ services:
   front:
     container_name: front
     build: ./front
-    ports:
-      - 3000:3000
 
   back:
     container_name: back
     build: ./back
-    ports:
-      - 3001:3001
 
   oauth2-proxy:
-      image: bitnami/oauth2-proxy:7.3.0
+      image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0
       command: --config /oauth2.cfg
       volumes:
         - ./oauth2.cfg:/oauth2.cfg

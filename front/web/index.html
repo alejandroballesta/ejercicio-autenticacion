@@ -3,19 +3,40 @@
     <body>
         <p id="greeting">Hello Anonymous</p>
         <p id="data">Hidden data</p>
-        <button id="btn-data">Data</button>
+        <button id="btn-data">Call API</button>
         <button id="btn-logout">Log out</button>
     </body>
     <script>
-        document.getElementById('btn-login').addEventListener('click', e => {
+        document.getElementById('btn-data').addEventListener('click', e => {
             e.preventDefault();
-            alert('hola');
+            
+            fetch('http://localhost:4180/api/protectedData',{
+                'Access-Control-Allow-Credentials': 'true'
+            })
+            .then(response => response.json())
+            .then(response => {
+                document.getElementById("data").innerHTML = response.message;
+            })
+            .catch(response =>{
+                document.getElementById("data").innerHTML = 'Hidden data';
+            })
+            
+            fetch('http://localhost:4180/oauth2/userinfo',{
+                'Access-Control-Allow-Credentials': 'true'
+            })
+            .then(response => response.json())
+            .then(response => {
+                document.getElementById("greeting").innerHTML = `Hi ${response.email}!`;
+            })
+            .catch(response =>{
+                document.getElementById("greeting").innerHTML = 'Hello Anonymous';
+            })
         });
-        const req = new XMLHttpRequest();
-        req.open('GET', '/api/protectedData', false);
-        req.send(null);
-        if (req.status===200) {
-            document.getElementById("data").innerHTML = req.responseText;;
-        }
+
+        document.getElementById('btn-logout').addEventListener('click', e => {
+            fetch('/oauth2/sign_out',{
+                mode:"no-cors"
+            })
+        });
     </script>
 </html>
