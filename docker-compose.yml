@@ -7,8 +7,6 @@ services:
     build: ./
     volumes:
       - "./src:/app/src"
-    ports:
-      - 3000:3000
 
   oauth2-proxy:
       image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0

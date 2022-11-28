@@ -3,19 +3,27 @@
     <body>
         <p id="greeting">Hello Anonymous</p>
         <p id="data">Hidden data</p>
-        <button id="btn-login">Log in</button>
-        <button id="btn-logout">Log out</button>
+        <button id="btn">Log in</button>
     </body>
     <script>
-        document.getElementById('btn-login').addEventListener('click', e => {
-            e.preventDefault();
-            alert('hola');
-        });
+        const btn = document.getElementById("btn");
+        let user; 
+
         const req = new XMLHttpRequest();
         req.open('GET', '/api/protectedData', false);
         req.send(null);
-        if (req.status===200) {
-            document.getElementById("data").innerHTML = req.responseText;;
+        if (req.status === 200) {
+            user = req.getResponseHeader('Gap-Auth');
+            document.getElementById("greeting").innerHTML = `Hi ${user}!`;
+            document.getElementById("data").innerHTML = req.responseText;
         }
+        
+        btn.innerText = user ? 'Log out' : 'Login';
+
+
+        btn.addEventListener('click', e => {
+            e.preventDefault();
+            window.location.href = user ? '/oauth2/sign_out' : '/oauth2/sign_in';
+        });
     </script>
 </html>
