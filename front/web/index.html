@@ -1,42 +1,30 @@
+
 <html>
     <head></head>
     <body>
         <p id="greeting">Hello Anonymous</p>
         <p id="data">Hidden data</p>
-        <button id="btn-data">Call API</button>
-        <button id="btn-logout">Log out</button>
+        <button id="btn">Log in</button>
     </body>
     <script>
-        document.getElementById('btn-data').addEventListener('click', e => {
-            e.preventDefault();
-            
-            fetch('http://localhost:4180/api/protectedData',{
-                'Access-Control-Allow-Credentials': 'true'
-            })
-            .then(response => response.json())
-            .then(response => {
-                document.getElementById("data").innerHTML = response.message;
-            })
-            .catch(response =>{
-                document.getElementById("data").innerHTML = 'Hidden data';
-            })
-            
-            fetch('http://localhost:4180/oauth2/userinfo',{
-                'Access-Control-Allow-Credentials': 'true'
-            })
-            .then(response => response.json())
-            .then(response => {
-                document.getElementById("greeting").innerHTML = `Hi ${response.email}!`;
-            })
-            .catch(response =>{
-                document.getElementById("greeting").innerHTML = 'Hello Anonymous';
-            })
-        });
+        const btn = document.getElementById("btn");
+        let user; 
 
-        document.getElementById('btn-logout').addEventListener('click', e => {
-            fetch('/oauth2/sign_out',{
-                mode:"no-cors"
-            })
+        const req = new XMLHttpRequest();
+        req.open('GET', '/api/protectedData', false);
+        req.send(null);
+        if (req.status === 200) {
+            user = req.getResponseHeader('Gap-Auth');
+            document.getElementById("greeting").innerHTML = `Hi ${user}!`;
+            document.getElementById("data").innerHTML = req.responseText;
+        }
+        
+        btn.innerText = user ? 'Log out' : 'Login';
+
+
+        btn.addEventListener('click', e => {
+            e.preventDefault();
+            window.location.href = user ? '/oauth2/sign_out' : '/oauth2/sign_in';
         });
     </script>
 </html>
